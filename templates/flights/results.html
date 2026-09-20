@@ -1,0 +1,694 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>Flight Results | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .banner-area {
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            min-height: 250px;
+        }
+
+        .results-container {
+            max-width: 1400px;
+            margin: -40px auto 50px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .results-header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .route-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .route {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .airport {
+            text-align: center;
+        }
+
+        .airport-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .airport-name {
+            font-size: 11px;
+            color: #8a8a9e;
+        }
+
+        .flight-line {
+            font-size: 20px;
+            color: #b0b0c0;
+        }
+
+        .date-info {
+            color: #8a8a9e;
+            font-size: 13px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        .filters-sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e67e22;
+        }
+
+        .filter-group {
+            margin-bottom: 22px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+            font-size: 13px;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .price-inputs input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .airline-list,
+        .time-slots,
+        .stops-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .airline-checkbox,
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .apply-filters {
+            width: 100%;
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s;
+        }
+
+        .apply-filters:hover {
+            background: #d35400;
+        }
+
+        .flights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .flight-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .flight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .flight-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flight-time-info {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .time-detail {
+            text-align: center;
+        }
+
+        .time {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .date {
+            font-size: 11px;
+            color: #8a8a9e;
+        }
+
+        .duration {
+            text-align: center;
+            color: #b0b0c0;
+            font-size: 11px;
+        }
+
+        .flight-line-small {
+            width: 70px;
+            height: 2px;
+            background: #e2e6ea;
+            position: relative;
+            margin: 5px 0;
+        }
+
+        .flight-line-small::after {
+            content: "✈";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 0 4px;
+            font-size: 10px;
+        }
+
+        .airline-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 140px;
+        }
+
+        .airline-logo {
+            width: 44px;
+            height: 44px;
+            background: #f0f2f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .airline-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .flight-number {
+            font-size: 11px;
+            color: #8a8a9e;
+        }
+
+        .price-info {
+            text-align: right;
+        }
+
+        .price-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e67e22;
+        }
+
+        .price-per {
+            font-size: 11px;
+            color: #8a8a9e;
+        }
+
+        .select-btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .select-btn:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+
+        .flight-details {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f6;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #8a8a9e;
+        }
+
+        .sort-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .sort-btn {
+            background: none;
+            border: none;
+            padding: 6px 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .sort-btn.active {
+            background: #e67e22;
+            color: white;
+        }
+
+        .results-count {
+            color: #8a8a9e;
+            font-size: 13px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 968px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+            }
+
+            .flight-main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .price-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 220px;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Find Your Flight</h6>
+                    <h1 class="text-white">Flight Results</h1>
+                    <p class="text-white">Compare and book the best flights</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="results-container">
+        <div class="results-header">
+            <div class="route-info">
+                <div class="route">
+                    <div class="airport">
+                        <div class="airport-code">THR</div>
+                        <div class="airport-name">Tehran (Mehrabad)</div>
+                    </div>
+                    <div class="flight-line">→</div>
+                    <div class="airport">
+                        <div class="airport-code">IST</div>
+                        <div class="airport-name">Istanbul</div>
+                    </div>
+                </div>
+                <div class="date-info">
+                    Wed, 15 Mar 2025 | 2 Passengers
+                </div>
+            </div>
+        </div>
+
+        <div class="results-grid">
+            <div class="filters-sidebar">
+                <div class="filter-title">Filters</div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Price Range</label>
+                    <div class="price-inputs">
+                        <input type="text" placeholder="Min" value="0" id="priceMin">
+                        <input type="text" placeholder="Max" value="15000000" id="priceMax">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Airlines</label>
+                    <div class="airline-list">
+                        <label class="airline-checkbox"><input type="checkbox" value="Mahan Air" checked> Mahan
+                            Air</label>
+                        <label class="airline-checkbox"><input type="checkbox" value="Turkish Airlines" checked> Turkish
+                            Airlines</label>
+                        <label class="airline-checkbox"><input type="checkbox" value="Qatar Airways"> Qatar
+                            Airways</label>
+                        <label class="airline-checkbox"><input type="checkbox" value="Emirates"> Emirates</label>
+                    </div>
+                </div>
+
+                <button class="apply-filters" onclick="applyFilters()">Apply Filters</button>
+            </div>
+
+            <div>
+                <div class="sort-bar">
+                    <div class="results-count" id="resultsCount">4 flights found</div>
+                    <div class="sort-options">
+                        <button class="sort-btn active" data-sort="recommended">Recommended</button>
+                        <button class="sort-btn" data-sort="cheapest">Cheapest</button>
+                        <button class="sort-btn" data-sort="fastest">Fastest</button>
+                    </div>
+                </div>
+
+                <div class="flights-list" id="flightsList">
+                    <!-- Flight 1 -->
+                    <div class="flight-card" data-price="8500000" data-duration="135" data-airline="Mahan Air">
+                        <div class="flight-main">
+                            <div class="flight-time-info">
+                                <div class="time-detail">
+                                    <div class="time">08:30</div>
+                                    <div class="date">THR</div>
+                                </div>
+                                <div>
+                                    <div class="duration">2h 15min</div>
+                                    <div class="flight-line-small"></div>
+                                    <div class="duration">Non-stop</div>
+                                </div>
+                                <div class="time-detail">
+                                    <div class="time">11:45</div>
+                                    <div class="date">IST</div>
+                                </div>
+                            </div>
+                            <div class="airline-info">
+                                <div class="airline-logo">✈</div>
+                                <div>
+                                    <div class="airline-name">Mahan Air</div>
+                                    <div class="flight-number">Flight: IR723</div>
+                                </div>
+                            </div>
+                            <div class="price-info">
+                                <div class="price-amount">8,500,000 تومان</div>
+                                <div class="price-per">per passenger</div>
+                            </div>
+                            <a href="{% url 'flights:detail' flight_id=1 %}" class="select-btn">Select Flight</a>
+                        </div>
+                        <div class="flight-details">
+                            <span>✅ 124 seats available</span>
+                            <span>🧳 30kg baggage</span>
+                            <span>🍱 Meal included</span>
+                        </div>
+                    </div>
+
+                    <!-- Flight 2 -->
+                    <div class="flight-card" data-price="7200000" data-duration="200" data-airline="Qatar Airways">
+                        <div class="flight-main">
+                            <div class="flight-time-info">
+                                <div class="time-detail">
+                                    <div class="time">10:15</div>
+                                    <div class="date">THR</div>
+                                </div>
+                                <div>
+                                    <div class="duration">3h 20min</div>
+                                    <div class="flight-line-small"></div>
+                                    <div class="duration">1 stop (Doha)</div>
+                                </div>
+                                <div class="time-detail">
+                                    <div class="time">14:35</div>
+                                    <div class="date">IST</div>
+                                </div>
+                            </div>
+                            <div class="airline-info">
+                                <div class="airline-logo">✈</div>
+                                <div>
+                                    <div class="airline-name">Qatar Airways</div>
+                                    <div class="flight-number">Flight: QR481</div>
+                                </div>
+                            </div>
+                            <div class="price-info">
+                                <div class="price-amount">7,200,000 تومان</div>
+                                <div class="price-per">per passenger</div>
+                            </div>
+                            <a href="{% url 'flights:detail' flight_id=2 %}" class="select-btn">Select Flight</a>
+                        </div>
+                        <div class="flight-details">
+                            <span>✅ 89 seats available</span>
+                            <span>🧳 30kg baggage</span>
+                            <span>🍱 Meal included</span>
+                        </div>
+                    </div>
+
+                    <!-- Flight 3 -->
+                    <div class="flight-card" data-price="9200000" data-duration="165" data-airline="Turkish Airlines">
+                        <div class="flight-main">
+                            <div class="flight-time-info">
+                                <div class="time-detail">
+                                    <div class="time">14:00</div>
+                                    <div class="date">THR</div>
+                                </div>
+                                <div>
+                                    <div class="duration">2h 45min</div>
+                                    <div class="flight-line-small"></div>
+                                    <div class="duration">Non-stop</div>
+                                </div>
+                                <div class="time-detail">
+                                    <div class="time">17:45</div>
+                                    <div class="date">IST</div>
+                                </div>
+                            </div>
+                            <div class="airline-info">
+                                <div class="airline-logo">✈</div>
+                                <div>
+                                    <div class="airline-name">Turkish Airlines</div>
+                                    <div class="flight-number">Flight: TK879</div>
+                                </div>
+                            </div>
+                            <div class="price-info">
+                                <div class="price-amount">9,200,000 تومان</div>
+                                <div class="price-per">per passenger</div>
+                            </div>
+                            <a href="{% url 'flights:detail' flight_id=3 %}" class="select-btn">Select Flight</a>
+                        </div>
+                        <div class="flight-details">
+                            <span>✅ 56 seats available</span>
+                            <span>🧳 30kg baggage</span>
+                            <span>🍱 Meal included</span>
+                        </div>
+                    </div>
+
+                    <!-- Flight 4 -->
+                    <div class="flight-card" data-price="6800000" data-duration="405" data-airline="Emirates">
+                        <div class="flight-main">
+                            <div class="flight-time-info">
+                                <div class="time-detail">
+                                    <div class="time">21:30</div>
+                                    <div class="date">THR</div>
+                                </div>
+                                <div>
+                                    <div class="duration">6h 45min</div>
+                                    <div class="flight-line-small"></div>
+                                    <div class="duration">1 stop (Dubai)</div>
+                                </div>
+                                <div class="time-detail">
+                                    <div class="time">05:15</div>
+                                    <div class="date">IST+1</div>
+                                </div>
+                            </div>
+                            <div class="airline-info">
+                                <div class="airline-logo">✈</div>
+                                <div>
+                                    <div class="airline-name">Emirates</div>
+                                    <div class="flight-number">Flight: EK979</div>
+                                </div>
+                            </div>
+                            <div class="price-info">
+                                <div class="price-amount">6,800,000 تومان</div>
+                                <div class="price-per">per passenger</div>
+                            </div>
+                            <a href="{% url 'flights:detail' flight_id=4 %}" class="select-btn">Select Flight</a>
+                        </div>
+                        <div class="flight-details">
+                            <span>✅ 234 seats available</span>
+                            <span>🧳 30kg baggage</span>
+                            <span>🍱 Meal included</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    <script>
+        var flightsContainer = document.getElementById('flightsList');
+        var sortBtns = document.querySelectorAll('.sort-btn');
+        var resultsCountSpan = document.getElementById('resultsCount');
+        var allFlights = Array.from(document.querySelectorAll('.flight-card'));
+
+        function updateResultsCount() {
+            var visibleFlights = document.querySelectorAll('.flight-card:not(.hidden)');
+            resultsCountSpan.innerHTML = visibleFlights.length + ' flights found';
+        }
+
+        function sortFlights(criteria) {
+            var flights = Array.from(document.querySelectorAll('.flight-card:not(.hidden)'));
+
+            flights.sort(function (a, b) {
+                if (criteria === 'cheapest') {
+                    var priceA = parseInt(a.getAttribute('data-price'));
+                    var priceB = parseInt(b.getAttribute('data-price'));
+                    return priceA - priceB;
+                }
+                else if (criteria === 'fastest') {
+                    var durationA = parseInt(a.getAttribute('data-duration'));
+                    var durationB = parseInt(b.getAttribute('data-duration'));
+                    return durationA - durationB;
+                }
+                else {
+                    return 0;
+                }
+            });
+
+            for (var i = 0; i < flights.length; i++) {
+                flightsContainer.appendChild(flights[i]);
+            }
+        }
+
+        for (var i = 0; i < sortBtns.length; i++) {
+            sortBtns[i].addEventListener('click', function () {
+                for (var j = 0; j < sortBtns.length; j++) {
+                    sortBtns[j].classList.remove('active');
+                }
+                this.classList.add('active');
+
+                var sortType = this.getAttribute('data-sort');
+                sortFlights(sortType);
+            });
+        }
+
+        function applyFilters() {
+            var minPrice = parseInt(document.getElementById('priceMin').value) || 0;
+            var maxPrice = parseInt(document.getElementById('priceMax').value) || 999999999;
+
+            var selectedAirlines = [];
+            var airlineChecks = document.querySelectorAll('.airline-list input:checked');
+            for (var i = 0; i < airlineChecks.length; i++) {
+                selectedAirlines.push(airlineChecks[i].value);
+            }
+
+            for (var i = 0; i < allFlights.length; i++) {
+                var flight = allFlights[i];
+                var price = parseInt(flight.getAttribute('data-price'));
+                var airline = flight.getAttribute('data-airline');
+
+                var priceMatch = (price >= minPrice && price <= maxPrice);
+                var airlineMatch = selectedAirlines.length === 0 || selectedAirlines.includes(airline);
+
+                if (priceMatch && airlineMatch) {
+                    flight.classList.remove('hidden');
+                } else {
+                    flight.classList.add('hidden');
+                }
+            }
+
+            updateResultsCount();
+        }
+    </script>
+</body>
+
+</html>

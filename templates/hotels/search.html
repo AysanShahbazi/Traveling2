@@ -1,0 +1,391 @@
+<!-- templates\hotels\search.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>Travel | Hotel Search</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-score {
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .rating-text {
+            color: #10b981;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .hotel-card {
+            border: none;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .hotel-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .hotel-img {
+            height: 100%;
+            min-height: 240px;
+            object-fit: cover;
+        }
+
+        .amenity-badge {
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .filter-card {
+            border: none;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .price-inputs input {
+            width: 50%;
+        }
+
+        .star-filter label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .star-filter input {
+            margin-right: 8px;
+        }
+
+        .stars-yellow {
+            color: #f8b600;
+        }
+
+        .amenity-filter label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .amenity-filter input {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <!-- Start banner Area -->
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 50vh;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Find Your Perfect Stay</h6>
+                    <h1 class="text-white">Hotel Search</h1>
+                    <p class="text-white">Book the best hotels at the best prices</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End banner Area -->
+
+    <!-- Start Hotel Search Area -->
+    <section class="popular-destination-area section-gap">
+        <div class="container">
+            <!-- Search Form -->
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-40 col-lg-10">
+                    <div class="card" style="border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div class="card-body p-4">
+                            <form method="get" action="{% url 'hotels:search' %}">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <label class="form-label">Destination</label>
+                                        <input type="text" name="destination" class="form-control"
+                                            placeholder="City or hotel name">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <label class="form-label">Check In</label>
+                                        <input type="date" name="check_in" class="form-control">
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 mb-3">
+                                        <label class="form-label">Check Out</label>
+                                        <input type="date" name="check_out" class="form-control">
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 mb-3">
+                                        <label class="form-label">Guests</label>
+                                        <select name="guests" class="form-control">
+                                            <option value="1">1 Guest</option>
+                                            <option value="2" selected>2 Guests</option>
+                                            <option value="3">3 Guests</option>
+                                            <option value="4">4 Guests</option>
+                                            <option value="5">5+ Guests</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-12 mb-3 d-flex align-items-end">
+                                        <button type="submit" class="primary-btn text-uppercase w-100">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="row mt-4">
+                <!-- Filters Sidebar -->
+                <div class="col-lg-3">
+                    <div class="card filter-card" style="border-radius: 10px;">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Filters</h5>
+
+                            <div class="filter-section">
+                                <h6 class="filter-title">Price Range (per night)</h6>
+                                <div class="price-inputs">
+                                    <input type="number" class="form-control" placeholder="Min $">
+                                    <input type="number" class="form-control" placeholder="Max $">
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h6 class="filter-title">Star Rating</h6>
+                                <div class="star-filter">
+                                    <label><input type="checkbox" checked> <span class="stars-yellow">★★★★★</span> 5
+                                        Stars</label>
+                                    <label><input type="checkbox" checked> <span class="stars-yellow">★★★★</span> 4
+                                        Stars</label>
+                                    <label><input type="checkbox"> <span class="stars-yellow">★★★</span> 3 Stars</label>
+                                    <label><input type="checkbox"> <span class="stars-yellow">★★</span> 2 Stars</label>
+                                </div>
+                            </div>
+
+                            <div class="filter-section">
+                                <h6 class="filter-title">Amenities</h6>
+                                <div class="amenity-filter">
+                                    <label><input type="checkbox" checked> Free WiFi</label>
+                                    <label><input type="checkbox"> Swimming Pool</label>
+                                    <label><input type="checkbox" checked> Breakfast Included</label>
+                                    <label><input type="checkbox"> Free Parking</label>
+                                    <label><input type="checkbox"> Fitness Center</label>
+                                    <label><input type="checkbox"> Room Service</label>
+                                </div>
+                            </div>
+
+                            <button class="primary-btn text-uppercase w-100 mt-2">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotels List -->
+                <div class="col-lg-9">
+
+                    <!-- Hotel 1 - Luxury Pool Hotel -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="card hotel-card" style="border-radius: 10px; overflow: hidden;">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop"
+                                        class="img-fluid w-100 hotel-img" alt="Espinas Palace Hotel">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h5 class="card-title mb-0">Espinas Palace Hotel</h5>
+                                                <div class="rating-badge">
+                                                    <span class="rating-score">8.9</span>
+                                                    <span class="rating-text">Excellent</span>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><i class="fa fa-map-marker"></i> Tehran,
+                                                Valiasr Street</p>
+                                            <p class="card-text">
+                                                <span class="amenity-badge me-1 mb-1">WiFi</span>
+                                                <span class="amenity-badge me-1 mb-1">Breakfast</span>
+                                                <span class="amenity-badge me-1 mb-1">Pool</span>
+                                                <span class="amenity-badge me-1 mb-1">Spa</span>
+                                                <span class="amenity-badge me-1 mb-1">Parking</span>
+                                            </p>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                                            style="border-top: 1px solid #eee;">
+                                            <div>
+                                                <span style="color: #f8b600;">★★★★★</span>
+                                                <small class="text-muted d-block">5 Star Luxury</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <h4 class="mb-1" style="color: #f8b600;">$150</h4>
+                                                <small class="text-muted d-block">per night</small>
+                                                <a href="{% url 'hotels:detail' 1 %}"
+                                                    class="primary-btn text-uppercase mt-2">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel 2 - Modern Hotel Room -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="card hotel-card" style="border-radius: 10px; overflow: hidden;">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop"
+                                        class="img-fluid w-100 hotel-img" alt="Parsian Azadi Hotel">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h5 class="card-title mb-0">Parsian Azadi Hotel</h5>
+                                                <div class="rating-badge">
+                                                    <span class="rating-score">8.2</span>
+                                                    <span class="rating-text">Very Good</span>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><i class="fa fa-map-marker"></i> Tehran,
+                                                Azadi Square</p>
+                                            <p class="card-text">
+                                                <span class="amenity-badge me-1 mb-1">WiFi</span>
+                                                <span class="amenity-badge me-1 mb-1">Breakfast</span>
+                                                <span class="amenity-badge me-1 mb-1">Gym</span>
+                                                <span class="amenity-badge me-1 mb-1">Parking</span>
+                                            </p>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                                            style="border-top: 1px solid #eee;">
+                                            <div>
+                                                <span style="color: #f8b600;">★★★★</span>
+                                                <small class="text-muted d-block">4 Star</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <h4 class="mb-1" style="color: #f8b600;">$95</h4>
+                                                <small class="text-muted d-block">per night</small>
+                                                <a href="{% url 'hotels:detail' 2 %}"
+                                                    class="primary-btn text-uppercase mt-2">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel 3 - Luxury Bedroom -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="card hotel-card" style="border-radius: 10px; overflow: hidden;">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&h=400&fit=crop"
+                                        class="img-fluid w-100 hotel-img" alt="Atlas Mall Hotel">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h5 class="card-title mb-0">Atlas Mall Hotel</h5>
+                                                <div class="rating-badge">
+                                                    <span class="rating-score">9.2</span>
+                                                    <span class="rating-text">Superb</span>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><i class="fa fa-map-marker"></i> Tehran,
+                                                Saadat Abad</p>
+                                            <p class="card-text">
+                                                <span class="amenity-badge me-1 mb-1">WiFi</span>
+                                                <span class="amenity-badge me-1 mb-1">Breakfast</span>
+                                                <span class="amenity-badge me-1 mb-1">Pool</span>
+                                                <span class="amenity-badge me-1 mb-1">Spa</span>
+                                                <span class="amenity-badge me-1 mb-1">Restaurant</span>
+                                            </p>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                                            style="border-top: 1px solid #eee;">
+                                            <div>
+                                                <span style="color: #f8b600;">★★★★★</span>
+                                                <small class="text-muted d-block">5 Star Boutique</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <h4 class="mb-1" style="color: #f8b600;">$180</h4>
+                                                <small class="text-muted d-block">per night</small>
+                                                <a href="{% url 'hotels:detail' 3 %}"
+                                                    class="primary-btn text-uppercase mt-2">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hotel Search Area -->
+
+    {% include 'includes/footer.html' %}
+</body>
+
+</html>

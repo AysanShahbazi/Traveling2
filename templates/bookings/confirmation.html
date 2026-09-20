@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta charset="UTF-8">
+    <title>Booking Confirmed | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        .confirmation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            margin: 40px auto;
+            max-width: 600px;
+        }
+
+        .success-icon {
+            font-size: 70px;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .booking-number {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        .btn-home {
+            background: #e67e22;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn-home:hover {
+            background: #d35400;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 60vh;">
+                <div class="col-lg-8 col-md-8 text-center">
+                    <div class="success-icon">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    <h1 class="text-white">Booking Confirmed!</h1>
+                    <p class="text-white">Your booking has been successfully completed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="confirmation-card">
+            <h2>Thank You for Your Booking!</h2>
+            <p>Your booking has been confirmed. A confirmation email has been sent to your registered email address.</p>
+
+            <div class="booking-number">
+                <strong>Booking Reference:</strong><br>
+                {{ booking_ref }}
+            </div>
+
+            <h5>Booking Details</h5>
+            <p><strong>Name:</strong> {{ checkout_info.full_name }}</p>
+            <p><strong>Email:</strong> {{ checkout_info.email }}</p>
+            <p><strong>Phone:</strong> {{ checkout_info.phone }}</p>
+            <p><strong>Total Amount:</strong> {{ total|floatformat:0 }} تومان</p>
+
+            <a href="{% url 'pages:index' %}" class="btn-home">Return to Homepage</a>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</body>
+
+</html>

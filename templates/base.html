@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}سایت مسافرتی{% endblock %}</title>
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
+
+    <!-- Main Content -->
+    <main>
+        {% block container %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
+
+    <!-- JS files -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

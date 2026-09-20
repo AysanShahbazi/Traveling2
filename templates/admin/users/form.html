@@ -1,0 +1,66 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{{ action }} User{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ action }} User</h2>
+    <a href="{% url 'pages:admin_users' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Users
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Username *</label>
+                    <input type="text" name="username" class="form-control" value="{{ user.username|default:'' }}"
+                        required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" value="{{ user.email|default:'' }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control">
+                    <small class="text-muted">Enter a password for new user</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control" value="{{ profile.phone|default:'' }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">User Type</label>
+                    <select name="user_type" class="form-control">
+                        <option value="user">Regular User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="is_active" checked>
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ action }} User</button>
+            <a href="{% url 'pages:admin_users' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% load static %}
+
+{% include 'includes/header.html' %}
+
+<!-- start banner Area -->
+<section class="relative about-banner">
+	<div class="overlay overlay-bg"></div>
+	<div class="container">
+		<div class="row d-flex align-items-center justify-content-center">
+			<div class="about-content col-lg-12">
+				<h1 class="text-white">{{ post.title }}</h1>
+				<p class="text-white link-nav">
+					<a href="{% url 'pages:index' %}">Home</a>
+					<span class="lnr lnr-arrow-right"></span>
+					<a href="{% url 'blog:blog-home' %}">Blog</a>
+					<span class="lnr lnr-arrow-right"></span>
+					<a href="#">{{ post.title|truncatechars:30 }}</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End banner Area -->
+
+<!-- Start post-content Area -->
+<section class="post-content-area single-post-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 posts-list">
+				<div class="single-post row">
+					<div class="col-lg-12">
+						<div class="feature-img">
+							{% if post.image %}
+							<img class="img-fluid" src="{{ post.image.url }}" alt="{{ post.title }}">
+							{% else %}
+							<img class="img-fluid" src="{% static 'img/blog/feature-img1.jpg' %}" alt="">
+							{% endif %}
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 meta-details">
+						<ul class="tags">
+							<li><a href="#">{{ post.category.name|default:"Travel" }}</a></li>
+						</ul>
+						<div class="user-details row">
+							<p class="user-name col-lg-12 col-md-12 col-6">
+								<a href="#">{{ post.author }}</a>
+								<span class="lnr lnr-user"></span>
+							</p>
+							<p class="date col-lg-12 col-md-12 col-6">
+								<a href="#">{{ post.publish_date|date:"d M, Y" }}</a>
+								<span class="lnr lnr-calendar-full"></span>
+							</p>
+							<p class="view col-lg-12 col-md-12 col-6">
+								<a href="#">{{ post.views }} Views</a>
+								<span class="lnr lnr-eye"></span>
+							</p>
+							<p class="comments col-lg-12 col-md-12 col-6">
+								<a href="#">{{ comments.count }} Comments</a>
+								<span class="lnr lnr-bubble"></span>
+							</p>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<h3 class="mt-20 mb-20">{{ post.title }}</h3>
+						{{ post.content|safe|linebreaks }}
+					</div>
+				</div>
+
+				<!-- Comments Area -->
+				<div class="comments-area">
+					<h4>{{ comments.count }} Comments</h4>
+					{% for comment in comments %}
+					<div class="comment-list">
+						<div class="single-comment justify-content-between d-flex">
+							<div class="user justify-content-between d-flex">
+								<div class="thumb">
+									<img src="{% static 'img/blog/c1.jpg' %}" alt="">
+								</div>
+								<div class="desc">
+									<h5><a href="#">{{ comment.name }}</a></h5>
+									<p class="date">{{ comment.created_at|date:"F d, Y" }}</p>
+									<p class="comment">{{ comment.message }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% empty %}
+					<p>No comments yet. Be the first to comment!</p>
+					{% endfor %}
+				</div>
+
+				<!-- Comment Form -->
+				<div class="comment-form">
+					<h4>Leave a Comment</h4>
+
+					{% if messages %}
+					{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+					{% endfor %}
+					{% endif %}
+
+					<form method="post">
+						{% csrf_token %}
+						<div class="form-group form-inline">
+							<div class="form-group col-lg-6 col-md-12 name">
+								<input type="text" class="form-control" name="name" placeholder="Enter Name" required>
+							</div>
+							<div class="form-group col-lg-6 col-md-12 email">
+								<input type="email" class="form-control" name="email" placeholder="Enter email address"
+									required>
+							</div>
+						</div>
+						<div class="form-group">
+							<textarea class="form-control mb-10" rows="5" name="message" placeholder="Message"
+								required></textarea>
+						</div>
+						<button type="submit" class="primary-btn text-uppercase">Post Comment</button>
+					</form>
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div class="col-lg-4 sidebar-widgets">
+				<div class="widget-wrap">
+					{% include 'includes/sidebar.html' %}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include 'includes/footer.html' %}

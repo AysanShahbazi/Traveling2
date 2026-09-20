@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta charset="UTF-8">
+    <title>Booking Confirmed | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .banner-area {
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            min-height: 200px;
+            padding-top: 60px;
+        }
+
+        .banner-area .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .banner-content h1 {
+            font-size: 36px;
+        }
+
+        .container-custom {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .confirmation-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .booking-number {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 25px 0;
+            font-size: 18px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .btn-primary {
+            background: #e67e22;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: #d35400;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="banner-content col-lg-12">
+                    <h1 class="text-white">Booking Confirmed</h1>
+                    <p class="text-white">Your flight has been successfully booked</p>
+                    <p class="text-white link-nav">
+                        <a href="{% url 'pages:index' %}" class="text-white">Home</a>
+                        <span class="lnr lnr-arrow-right"></span>
+                        <a href="#" class="text-white">Confirmation</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-custom">
+        <div class="confirmation-card">
+            <div class="success-icon">✓</div>
+            <div class="confirmation-title">Booking Successful!</div>
+            <p>Your flight has been confirmed. A confirmation email has been sent to your registered email address.</p>
+
+            <div class="booking-number">
+                <strong>Booking Reference:</strong><br>
+                {{ booking_ref }}
+            </div>
+
+            <div class="btn-group">
+                <a href="{% url 'flights:all_flights' %}" class="btn-secondary">Back to Flights</a>
+                <a href="{% url 'pages:index' %}" class="btn-primary">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</body>
+
+</html>

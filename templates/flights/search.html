@@ -1,0 +1,533 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>Travel | Flight Search</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        .flight-search-card {
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .trip-type-selector {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .trip-type-selector label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .trip-type-selector input {
+            margin-right: 6px;
+        }
+
+        .passenger-counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .counter-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .counter-btn:hover {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+
+        .counter-value {
+            min-width: 25px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .route-card-item {
+            display: block;
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .route-card-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+            border-color: #e67e22;
+        }
+
+        .route-code {
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 16px;
+        }
+
+        .route-price {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .all-flights-btn-wrapper {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .flight-result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .flight-result-card:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Fix for header styling */
+        .banner-area {
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .banner-area .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-left {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <!-- Start banner Area -->
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 300px;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Find Your Perfect Flight</h6>
+                    <h1 class="text-white">Flight Search</h1>
+                    <p class="text-white">Book the cheapest and fastest flights</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End banner Area -->
+
+    <!-- Start Flight Search Area -->
+    <section class="popular-destination-area section-gap">
+        <div class="container">
+            <!-- Search Form -->
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-40 col-lg-10">
+                    <div class="card flight-search-card">
+                        <div class="card-body p-4">
+                            <form action="{% url 'flights:search' %}" method="get" id="searchForm">
+
+                                <!-- Trip Type -->
+                                <div class="trip-type-selector">
+                                    <label>
+                                        <input type="radio" name="trip_type" value="one_way" id="tripOneWay"> One Way
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="trip_type" value="round" id="tripRound"> Round Trip
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="trip_type" value="multi" id="tripMulti"> Multi City
+                                    </label>
+                                </div>
+
+                                <!-- Origin & Destination -->
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label class="form-label">From</label>
+                                        <input type="text" name="origin" class="form-control" placeholder="Tehran (THR)"
+                                            id="originInput" value="{{ origin }}">
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label class="form-label">To</label>
+                                        <input type="text" name="destination" class="form-control"
+                                            placeholder="Istanbul (IST)" id="destInput" value="{{ destination }}">
+                                    </div>
+                                </div>
+
+                                <!-- Dates -->
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label class="form-label">Departure Date</label>
+                                        <input type="date" name="departure_date" class="form-control" id="departureDate"
+                                            value="{{ departure_date }}">
+                                    </div>
+                                    <div class="col-lg-6 mb-3" id="returnDateGroup" style="display:none;">
+                                        <label class="form-label">Return Date</label>
+                                        <input type="date" name="return_date" class="form-control"
+                                            value="{{ return_date }}">
+                                    </div>
+                                </div>
+
+                                <!-- Passengers & Class -->
+                                <div class="row">
+                                    <div class="col-lg-8 mb-3">
+                                        <label class="form-label">Passengers</label>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <small class="text-muted">Adults</small>
+                                                <div class="passenger-counter">
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('adults', -1)">-</button>
+                                                    <span class="counter-value" id="adultsCount">{{ adults }}</span>
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('adults', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <small class="text-muted">Children</small>
+                                                <div class="passenger-counter">
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('children', -1)">-</button>
+                                                    <span class="counter-value" id="childrenCount">{{ children }}</span>
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('children', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <small class="text-muted">Infants</small>
+                                                <div class="passenger-counter">
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('infants', -1)">-</button>
+                                                    <span class="counter-value" id="infantsCount">{{ infants }}</span>
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="changeCount('infants', 1)">+</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 mb-3">
+                                        <label class="form-label">Class</label>
+                                        <select name="class" class="form-control" id="travelClass">
+                                            <option value="economy">Economy</option>
+                                            <option value="business">Business</option>
+                                            <option value="first">First Class</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="adults" id="adults" value="{{ adults }}">
+                                <input type="hidden" name="children" id="children" value="{{ children }}">
+                                <input type="hidden" name="infants" id="infants" value="{{ infants }}">
+
+                                <button type="submit" class="primary-btn text-uppercase w-100 mt-3">Search
+                                    Flights</button>
+                            </form>
+
+                            <div class="all-flights-btn-wrapper">
+                                <a href="{% url 'flights:all_flights' %}" class="primary-btn text-uppercase">
+                                    ✈️ View All Flights
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- نتایج جستجو -->
+            {% if flights %}
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="menu-content col-lg-10">
+                    <div class="results-count mb-3">
+                        <strong>{{ flights|length }}</strong> flights found
+                    </div>
+
+                    {% for flight in flights %}
+                    <div class="flight-result-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <div class="airline-info d-flex align-items-center gap-2">
+                                    <div class="airline-icon"
+                                        style="width: 50px; height: 50px; background: #f0f2f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                        ✈</div>
+                                    <div>
+                                        <div class="airline-name fw-bold">{{ flight.airline.name }}</div>
+                                        <div class="flight-code small text-muted">{{ flight.flight_number }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="route-info d-flex justify-content-between align-items-center">
+                                    <div class="text-center">
+                                        <div class="time fw-bold fs-4">{{ flight.departure_time|date:"H:i" }}</div>
+                                        <div class="airport-code fw-bold">{{ flight.origin.code }}</div>
+                                        <div class="airport-name small text-muted">
+                                            {% if flight.origin.city %}
+                                            {{ flight.origin.city|truncatechars:15 }}
+                                            {% else %}
+                                            {{ flight.origin.name|truncatechars:15 }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="text-center px-3">
+                                        <div class="duration small text-muted">{{ flight.get_duration }}</div>
+                                        <div class="flight-line">→</div>
+                                        <div class="stops small text-muted">Direct</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="time fw-bold fs-4">{{ flight.arrival_time|date:"H:i" }}</div>
+                                        <div class="airport-code fw-bold">{{ flight.destination.code }}</div>
+                                        <div class="airport-name small text-muted">
+                                            {% if flight.destination.city %}
+                                            {{ flight.destination.city|truncatechars:15 }}
+                                            {% else %}
+                                            {{ flight.destination.name|truncatechars:15 }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="price fw-bold fs-4" style="color: #e67e22;">
+                                    {{ flight.economy_price|floatformat:0 }}
+                                    <small class="fs-6">تومان</small>
+                                </div>
+                                <div class="price-per small text-muted">per passenger</div>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <a href="{% url 'flights:detail' flight.id %}" class="primary-btn"
+                                    style="padding: 8px 20px; font-size: 13px;">Select Flight</a>
+                            </div>
+                        </div>
+                        <div class="flight-features mt-3 pt-2 border-top d-flex gap-3 small text-muted">
+                            <span>🧳 {{ flight.baggage_allowance }}kg baggage</span>
+                            {% if flight.has_meal %}
+                            <span>🍽️ Meal included</span>
+                            {% endif %}
+                            <span>💺 {{ flight.economy_seats }} seats available</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% elif origin or destination or departure_date %}
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="menu-content col-lg-10 text-center">
+                    <div class="no-results py-5">
+                        <i class="fa fa-plane fa-3x text-muted mb-3"></i>
+                        <h3>No flights found</h3>
+                        <p>Try changing your search criteria</p>
+                        <a href="{% url 'flights:search' %}" class="primary-btn">Clear Filters</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Popular Routes -->
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-lg-10">
+                    <div class="title text-center mb-4">
+                        <h3>Popular Routes</h3>
+                        <p>Most booked flights by our travelers</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="route-card-item" data-origin="THR" data-dest="IST">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="route-code">THR</span>
+                                        <span class="mx-2">→</span>
+                                        <span class="route-code">IST</span>
+                                    </div>
+                                    <div class="route-price">from $250</div>
+                                </div>
+                                <small class="text-muted">Tehran to Istanbul</small>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="route-card-item" data-origin="THR" data-dest="DXB">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="route-code">THR</span>
+                                        <span class="mx-2">→</span>
+                                        <span class="route-code">DXB</span>
+                                    </div>
+                                    <div class="route-price">from $350</div>
+                                </div>
+                                <small class="text-muted">Tehran to Dubai</small>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="route-card-item" data-origin="MHD" data-dest="THR">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="route-code">MHD</span>
+                                        <span class="mx-2">→</span>
+                                        <span class="route-code">THR</span>
+                                    </div>
+                                    <div class="route-price">from $50</div>
+                                </div>
+                                <small class="text-muted">Mashhad to Tehran</small>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="route-card-item" data-origin="IST" data-dest="LHR">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="route-code">IST</span>
+                                        <span class="mx-2">→</span>
+                                        <span class="route-code">LHR</span>
+                                    </div>
+                                    <div class="route-price">from $450</div>
+                                </div>
+                                <small class="text-muted">Istanbul to London</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Flight Search Area -->
+
+    {% include 'includes/footer.html' %}
+
+    <script>
+        // دریافت مقادیر از Django و تنظیم فرم
+        const tripType = "{{ trip_type }}";
+        const travelClass = "{{ travel_class }}";
+
+        // تنظیم radio buttons بر اساس مقدار trip_type
+        if (tripType === "one_way") {
+            document.getElementById('tripOneWay').checked = true;
+            document.getElementById('returnDateGroup').style.display = 'none';
+        } else if (tripType === "round") {
+            document.getElementById('tripRound').checked = true;
+            document.getElementById('returnDateGroup').style.display = 'block';
+        } else if (tripType === "multi") {
+            document.getElementById('tripMulti').checked = true;
+        }
+
+        // تنظیم select برای کلاس سفر
+        const classSelect = document.getElementById('travelClass');
+        for (let i = 0; i < classSelect.options.length; i++) {
+            if (classSelect.options[i].value === travelClass) {
+                classSelect.options[i].selected = true;
+                break;
+            }
+        }
+
+        // مدیریت نمایش return date
+        const tripOneWay = document.getElementById('tripOneWay');
+        const tripRound = document.getElementById('tripRound');
+        const returnDateGroup = document.getElementById('returnDateGroup');
+
+        if (tripOneWay) {
+            tripOneWay.addEventListener('change', function () {
+                if (this.checked) {
+                    returnDateGroup.style.display = 'none';
+                }
+            });
+        }
+
+        if (tripRound) {
+            tripRound.addEventListener('change', function () {
+                if (this.checked) {
+                    returnDateGroup.style.display = 'block';
+                }
+            });
+        }
+
+        // مدیریت تغییر تعداد مسافران
+        const adultsInput = document.getElementById('adults');
+        const childrenInput = document.getElementById('children');
+        const infantsInput = document.getElementById('infants');
+        const adultsSpan = document.getElementById('adultsCount');
+        const childrenSpan = document.getElementById('childrenCount');
+        const infantsSpan = document.getElementById('infantsCount');
+
+        function changeCount(type, delta) {
+            let current, span, input;
+            if (type === 'adults') {
+                current = parseInt(adultsSpan.innerText);
+                span = adultsSpan;
+                input = adultsInput;
+            } else if (type === 'children') {
+                current = parseInt(childrenSpan.innerText);
+                span = childrenSpan;
+                input = childrenInput;
+            } else {
+                current = parseInt(infantsSpan.innerText);
+                span = infantsSpan;
+                input = infantsInput;
+            }
+            const newVal = current + delta;
+            if (newVal >= 0 && (type !== 'adults' || newVal > 0)) {
+                span.innerText = newVal;
+                input.value = newVal;
+            }
+        }
+
+        // محبوب‌ترین مسیرها
+        const routeLinks = document.querySelectorAll('.route-card-item');
+        for (let i = 0; i < routeLinks.length; i++) {
+            routeLinks[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                const origin = this.getAttribute('data-origin');
+                const dest = this.getAttribute('data-dest');
+                document.getElementById('originInput').value = origin;
+                document.getElementById('destInput').value = dest;
+                document.getElementById('searchForm').submit();
+            });
+        }
+    </script>
+</body>
+
+</html>

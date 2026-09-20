@@ -1,0 +1,429 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>All Flights | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .banner-area {
+            position: relative;
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            min-height: 250px;
+        }
+
+        .banner-area .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .flight-card {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f6;
+            transition: all 0.3s;
+        }
+
+        .flight-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .flight-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .airline-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 160px;
+        }
+
+        .airline-icon {
+            width: 44px;
+            height: 44px;
+            background: #f0f2f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .airline-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a1a2e;
+        }
+
+        .flight-code {
+            font-size: 12px;
+            color: #8a8a9e;
+        }
+
+        .route-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .airport {
+            text-align: center;
+            min-width: 90px;
+        }
+
+        .airport-code {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a1a2e;
+        }
+
+        .airport-name {
+            font-size: 11px;
+            color: #8a8a9e;
+            margin-top: 4px;
+        }
+
+        .flight-time {
+            font-size: 13px;
+            font-weight: 500;
+            color: #e67e22;
+            margin-top: 6px;
+        }
+
+        .route-line {
+            text-align: center;
+            color: #b0b0c0;
+            font-size: 14px;
+        }
+
+        .duration {
+            font-size: 11px;
+            color: #8a8a9e;
+            margin-top: 4px;
+        }
+
+        .price-section {
+            text-align: right;
+            min-width: 160px;
+        }
+
+        .price-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .price-label {
+            font-size: 10px;
+            color: #8a8a9e;
+        }
+
+        .features {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #8a8a9e;
+        }
+
+        .details-btn {
+            background: #e67e22;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .details-btn:hover {
+            background: #d35400;
+            color: white;
+        }
+
+        .filter-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            border: 1px solid #eef2f6;
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 18px;
+        }
+
+        .filter-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .filter-btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 28px;
+        }
+
+        .filter-btn.reset {
+            background: #95a5a6;
+            margin-top: 10px;
+            text-align: center;
+            display: block;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: #8a8a9e;
+            margin-bottom: 20px;
+        }
+
+        .results-count strong {
+            color: #e67e22;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            background: #fff;
+            border-radius: 12px;
+        }
+
+        .pagination-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li a,
+        .pagination li span {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            color: #4a5568;
+        }
+
+        .pagination li.active span {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: white;
+        }
+
+        .pagination li a:hover {
+            background: #f7fafc;
+            border-color: #e67e22;
+        }
+
+        @media (max-width: 768px) {
+            .flight-row {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .route-section {
+                flex-direction: column;
+            }
+
+            .route-line {
+                transform: rotate(90deg);
+            }
+
+            .price-section {
+                text-align: center;
+            }
+
+            .airline-section {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 250px;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Book Your Journey</h6>
+                    <h1 class="text-white">All Flights</h1>
+                    <p class="text-white">Browse all available flights and choose the best option for you</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-destination-area section-gap">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content col-lg-10">
+
+                    <div class="filter-card">
+                        <div class="filter-title">Filter Flights</div>
+                        <form method="get">
+                            <div class="row align-items-end">
+                                <div class="col-md-5">
+                                    <div class="filter-group">
+                                        <label>From</label>
+                                        <input type="text" name="origin" placeholder="Airport code (THR)"
+                                            value="{{ origin_filter }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="filter-group">
+                                        <label>To</label>
+                                        <input type="text" name="destination" placeholder="Airport code (IST)"
+                                            value="{{ dest_filter }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="filter-btn">Apply</button>
+                                    <a href="{% url 'flights:all_flights' %}" class="filter-btn reset">Reset</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="results-count">
+                        <strong>{{ total_count }}</strong> flights found
+                    </div>
+
+                    {% for flight in flights %}
+                    <div class="flight-card">
+                        <div class="flight-row">
+                            <div class="airline-section">
+                                <div class="airline-icon">✈</div>
+                                <div class="airline-details">
+                                    <div class="airline-name">{{ flight.airline.name }}</div>
+                                    <div class="flight-code">{{ flight.flight_number }}</div>
+                                </div>
+                            </div>
+                            <div class="route-section">
+                                <div class="airport">
+                                    <div class="airport-code">{{ flight.origin.code }}</div>
+                                    <div class="airport-name">{{ flight.origin.name|truncatechars:15 }}</div>
+                                    <div class="flight-time">{{ flight.departure_time|date:"H:i" }}</div>
+                                </div>
+                                <div class="route-line">
+                                    <span>→</span>
+                                    <div class="duration">{{ flight.get_duration }}</div>
+                                </div>
+                                <div class="airport">
+                                    <div class="airport-code">{{ flight.destination.code }}</div>
+                                    <div class="airport-name">{{ flight.destination.name|truncatechars:15 }}</div>
+                                    <div class="flight-time">{{ flight.arrival_time|date:"H:i" }}</div>
+                                </div>
+                            </div>
+                            <div class="price-section">
+                                <div class="price-amount">{{ flight.economy_price|floatformat:0 }} تومان</div>
+                                <div class="price-label">per passenger</div>
+                                <div class="features">
+                                    <span>🧳 {{ flight.baggage_allowance }}kg</span>
+                                    {% if flight.has_meal %}<span>🍽️ Meal</span>{% endif %}
+                                </div>
+                            </div>
+                            <div>
+                                <a href="{% url 'flights:detail' flight.id %}" class="details-btn">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="no-results">
+                        <h3>No flights found</h3>
+                        <p>Try changing your search criteria</p>
+                        <a href="{% url 'flights:all_flights' %}" class="primary-btn"
+                            style="background:#e67e22; margin-top:16px;">Reset Filters</a>
+                    </div>
+                    {% endfor %}
+
+                    {% if flights.has_other_pages %}
+                    <div class="pagination-area">
+                        <ul class="pagination">
+                            {% if flights.has_previous %}
+                            <li><a
+                                    href="?page={{ flights.previous_page_number }}{% if origin_filter %}&origin={{ origin_filter }}{% endif %}{% if dest_filter %}&destination={{ dest_filter }}{% endif %}">Previous</a>
+                            </li>
+                            {% endif %}
+                            <li class="active"><span>{{ flights.number }}</span></li>
+                            {% if flights.has_next %}
+                            <li><a
+                                    href="?page={{ flights.next_page_number }}{% if origin_filter %}&origin={{ origin_filter }}{% endif %}{% if dest_filter %}&destination={{ dest_filter }}{% endif %}">Next</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+</body>
+
+</html>

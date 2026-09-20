@@ -1,0 +1,650 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta charset="UTF-8">
+    <title>Flight Details | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .banner-area {
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            min-height: 250px;
+        }
+
+        .banner-area .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .detail-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .flight-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .flight-header {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            padding: 20px;
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .flight-route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .airport-code {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .flight-body {
+            padding: 24px;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e67e22;
+            display: inline-block;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .class-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .class-card {
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .class-card.selected {
+            border-color: #e67e22;
+            background: #fff8f0;
+        }
+
+        .class-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-top: 6px;
+        }
+
+        .seat-map {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .seat {
+            display: inline-block;
+            width: 55px;
+            height: 55px;
+            margin: 5px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 51px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .seat:hover:not(.unavailable) {
+            border-color: #e67e22;
+            background: #fff8f0;
+            transform: scale(1.05);
+        }
+
+        .seat.selected {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: white;
+        }
+
+        .seat.in-cart {
+            background: #ff6b6b;
+            border-color: #cc0000;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .seat.purchased {
+            background: #2ecc71;
+            border-color: #27ae60;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .seat-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+        }
+
+        .price-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 2px solid #ddd;
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 18px;
+        }
+
+        .passenger-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .counter-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .counter-btn:hover {
+            background: #e67e22;
+            color: white;
+        }
+
+        .selected-seats-list {
+            background: #fff8f0;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .seat-badge {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 3px;
+            cursor: pointer;
+        }
+
+        .seat-badge:hover {
+            background: #d35400;
+        }
+
+        .warning-text {
+            color: #e67e22;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .book-btn {
+            width: 100%;
+            background: #e67e22;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+
+        .book-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .seat {
+                width: 42px;
+                height: 42px;
+                line-height: 38px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row align-items-center justify-content-center" style="min-height: 250px;">
+                <div class="col-lg-8 text-center">
+                    <h1 class="text-white">Flight Details</h1>
+                    <p class="text-white">Select your seats and complete booking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="detail-container">
+        <div class="flight-card">
+            <div class="flight-header">
+                <div class="flight-route">
+                    <div>
+                        <div class="airport-code">{{ flight.origin.code }}</div>
+                        <div>{{ flight.departure_time|date:"H:i" }}</div>
+                        <small>{{ flight.departure_time|date:"d M Y" }}</small>
+                    </div>
+                    <div>✈ {{ flight.get_duration }}</div>
+                    <div>
+                        <div class="airport-code">{{ flight.destination.code }}</div>
+                        <div>{{ flight.arrival_time|date:"H:i" }}</div>
+                        <small>{{ flight.arrival_time|date:"d M Y" }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flight-body">
+                <div class="info-section">
+                    <div class="info-title">Flight Information</div>
+                    <div class="info-row"><span>Airline</span><span>{{ flight.airline.name }}</span></div>
+                    <div class="info-row"><span>Flight Number</span><span>{{ flight.flight_number }}</span></div>
+                    <div class="info-row"><span>Baggage</span><span>{{ flight.baggage_allowance }} kg</span></div>
+                    <div class="info-row"><span>Meal</span><span>{% if flight.has_meal %}Included{% else %}Not
+                            Included{% endif %}</span></div>
+                </div>
+
+                <div class="info-title">Select Travel Class</div>
+                <div class="class-row">
+                    <div class="class-card" id="classEconomy" data-price="{{ economy_price|default:'0' }}">
+                        <div>Economy Class</div>
+                        <div class="class-price">{{ economy_price|default:"0"|floatformat:0 }} تومان</div>
+                    </div>
+                    <div class="class-card" id="classBusiness" data-price="{{ business_price|default:'0' }}">
+                        <div>Business Class</div>
+                        <div class="class-price">{{ business_price|default:"0"|floatformat:0 }} تومان</div>
+                    </div>
+                    <div class="class-card" id="classFirst" data-price="{{ first_class_price|default:'0' }}">
+                        <div>First Class</div>
+                        <div class="class-price">{{ first_class_price|default:"0"|floatformat:0 }} تومان</div>
+                    </div>
+                </div>
+
+                <div class="info-title">Select Your Seats</div>
+                <div class="seat-map" id="seatMap"></div>
+
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="legend-box" style="background:white; border:2px solid #ddd;"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background:#e67e22;"></div><span>Your Selection</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background:#ff6b6b;"></div><span>In Cart</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background:#2ecc71;"></div><span>Purchased</span>
+                    </div>
+                </div>
+
+                <div id="selectedSeatsDisplay" class="selected-seats-list" style="display: none;">
+                    <strong>Your Selected Seats:</strong> <span id="selectedSeatsList"></span>
+                </div>
+                <div id="seatWarning" class="warning-text" style="display: none;"></div>
+
+                <div class="price-box">
+                    <div class="price-row"><span>Price per passenger</span><span id="displayPrice">{{
+                            economy_price|default:"0"|floatformat:0 }} تومان</span></div>
+                    <div class="price-row">
+                        <span>Number of passengers</span>
+                        <div class="passenger-control">
+                            <button class="counter-btn" id="minusBtn">-</button>
+                            <span id="passengerCount" style="min-width: 30px; text-align: center;">1</span>
+                            <button class="counter-btn" id="plusBtn">+</button>
+                        </div>
+                    </div>
+                    <div class="price-row"><span>Selected seats</span><span id="selectedSeatCount">0 / 1</span></div>
+                    <div class="price-total"><span>Total Amount</span><span id="totalPrice">{{
+                            economy_price|default:"0"|floatformat:0 }} تومان</span></div>
+
+                    <form method="post" action="{% url 'flights:add_to_cart' flight.id %}" id="bookingForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="class_type" id="classTypeInput" value="economy">
+                        <input type="hidden" name="seat_number" id="seatNumberInput" value="">
+                        <input type="hidden" name="passenger_count" id="passengerCountInput" value="1">
+                        <button type="submit" class="book-btn" id="bookBtn" disabled>Book Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    <script>
+        var flightId = parseInt("{{ flight.id|escapejs }}");
+
+        var economyPrice = parseInt("{{ economy_price|default:'0' }}");
+        var businessPrice = parseInt("{{ business_price|default:'0' }}");
+        var firstPrice = parseInt("{{ first_class_price|default:'0' }}");
+
+        var currentClass = 'economy';
+        var currentPrice = economyPrice;
+        var passengerCount = 1;
+        var selectedSeats = [];
+        var seatStatus = {};
+
+        function getCookie(name) {
+            var value = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        value = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return value;
+        }
+
+        function fetchSeatStatus() {
+            fetch('/flights/api/seat-status/' + flightId + '/')
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    seatStatus = data;
+                    renderSeatMap();
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                    renderSeatMap();
+                });
+        }
+
+        function renderSeatMap() {
+            var container = document.getElementById('seatMap');
+            if (!container) return;
+            container.innerHTML = '';
+
+            var rows = ['A', 'B', 'C', 'D', 'E'];
+            for (var r = 0; r < rows.length; r++) {
+                var rowDiv = document.createElement('div');
+                rowDiv.style.marginBottom = '5px';
+                for (var s = 1; s <= 6; s++) {
+                    var seatNum = rows[r] + s;
+                    var seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.textContent = seatNum;
+                    seat.setAttribute('data-seat', seatNum);
+
+                    var status = seatStatus[seatNum];
+                    if (status) {
+                        if (status.status === 'purchased') {
+                            seat.classList.add('purchased');
+                        } else if (status.status === 'booked') {
+                            seat.classList.add('in-cart');
+                        }
+                    }
+
+                    if (selectedSeats.indexOf(seatNum) !== -1 && (!status || status.status !== 'purchased')) {
+                        seat.classList.add('selected');
+                    }
+
+                    seat.onclick = (function (sn) {
+                        return function () { handleSeatClick(sn); };
+                    })(seatNum);
+
+                    rowDiv.appendChild(seat);
+                }
+                container.appendChild(rowDiv);
+            }
+            updateDisplay();
+        }
+
+        function updateSeatOnServer(seatNumber, action) {
+            fetch('/flights/api/update-seat/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': getCookie('csrftoken') },
+                body: 'flight_id=' + flightId + '&seat_number=' + seatNumber + '&action=' + action
+            }).catch(function (e) { console.error(e); });
+        }
+
+        function handleSeatClick(seatNumber) {
+            var status = seatStatus[seatNumber];
+
+            if (status && status.status === 'purchased') {
+                alert('This seat has already been purchased!');
+                return;
+            }
+
+            if (status && status.status === 'booked') {
+                alert('This seat is already in someone\'s cart!');
+                return;
+            }
+
+            var idx = selectedSeats.indexOf(seatNumber);
+            if (idx === -1) {
+                if (selectedSeats.length < passengerCount) {
+                    selectedSeats.push(seatNumber);
+                    updateSeatOnServer(seatNumber, 'booked');
+                } else {
+                    alert('You can only select ' + passengerCount + ' seat(s)');
+                    return;
+                }
+            } else {
+                selectedSeats.splice(idx, 1);
+                updateSeatOnServer(seatNumber, 'available');
+            }
+            renderSeatMap();
+        }
+
+        function updateDisplay() {
+            document.getElementById('displayPrice').innerHTML = currentPrice.toLocaleString() + ' تومان';
+            document.getElementById('totalPrice').innerHTML = (currentPrice * passengerCount).toLocaleString() + ' تومان';
+            document.getElementById('passengerCount').innerHTML = passengerCount;
+            document.getElementById('passengerCountInput').value = passengerCount;
+            document.getElementById('selectedSeatCount').innerHTML = selectedSeats.length + ' / ' + passengerCount;
+
+            var btn = document.getElementById('bookBtn');
+            var warning = document.getElementById('seatWarning');
+            var seatsDisplay = document.getElementById('selectedSeatsDisplay');
+
+            if (selectedSeats.length === passengerCount && selectedSeats.length > 0) {
+                btn.disabled = false;
+                warning.style.display = 'none';
+                document.getElementById('seatNumberInput').value = selectedSeats.join(',');
+                document.getElementById('selectedSeatsList').innerHTML = selectedSeats.join(', ');
+                seatsDisplay.style.display = 'block';
+            } else {
+                btn.disabled = true;
+                if (selectedSeats.length < passengerCount && selectedSeats.length > 0) {
+                    warning.style.display = 'block';
+                    warning.innerHTML = '⚠️ Please select ' + (passengerCount - selectedSeats.length) + ' more seat(s)';
+                    seatsDisplay.style.display = 'block';
+                    document.getElementById('selectedSeatsList').innerHTML = selectedSeats.join(', ');
+                } else if (selectedSeats.length > passengerCount) {
+                    warning.style.display = 'block';
+                    warning.innerHTML = '⚠️ You have selected ' + (selectedSeats.length - passengerCount) + ' extra seat(s)';
+                    seatsDisplay.style.display = 'block';
+                    document.getElementById('selectedSeatsList').innerHTML = selectedSeats.join(', ');
+                } else if (selectedSeats.length === 0) {
+                    seatsDisplay.style.display = 'none';
+                    warning.style.display = 'none';
+                } else {
+                    seatsDisplay.style.display = 'none';
+                }
+            }
+        }
+
+        // Class selection
+        var classEconomy = document.getElementById('classEconomy');
+        var classBusiness = document.getElementById('classBusiness');
+        var classFirst = document.getElementById('classFirst');
+
+        if (classEconomy) {
+            classEconomy.onclick = function () {
+                document.querySelectorAll('.class-card').forEach(function (c) { c.classList.remove('selected'); });
+                this.classList.add('selected');
+                currentClass = 'economy';
+                currentPrice = economyPrice;
+                document.getElementById('classTypeInput').value = 'economy';
+                for (var i = 0; i < selectedSeats.length; i++) {
+                    updateSeatOnServer(selectedSeats[i], 'available');
+                }
+                selectedSeats = [];
+                fetchSeatStatus();
+            };
+        }
+
+        if (classBusiness) {
+            classBusiness.onclick = function () {
+                document.querySelectorAll('.class-card').forEach(function (c) { c.classList.remove('selected'); });
+                this.classList.add('selected');
+                currentClass = 'business';
+                currentPrice = businessPrice;
+                document.getElementById('classTypeInput').value = 'business';
+                for (var i = 0; i < selectedSeats.length; i++) {
+                    updateSeatOnServer(selectedSeats[i], 'available');
+                }
+                selectedSeats = [];
+                fetchSeatStatus();
+            };
+        }
+
+        if (classFirst) {
+            classFirst.onclick = function () {
+                document.querySelectorAll('.class-card').forEach(function (c) { c.classList.remove('selected'); });
+                this.classList.add('selected');
+                currentClass = 'first';
+                currentPrice = firstPrice;
+                document.getElementById('classTypeInput').value = 'first';
+                for (var i = 0; i < selectedSeats.length; i++) {
+                    updateSeatOnServer(selectedSeats[i], 'available');
+                }
+                selectedSeats = [];
+                fetchSeatStatus();
+            };
+        }
+
+        if (classEconomy) classEconomy.classList.add('selected');
+
+        // Passenger count controls
+        var minusBtn = document.getElementById('minusBtn');
+        var plusBtn = document.getElementById('plusBtn');
+
+        if (minusBtn) {
+            minusBtn.onclick = function () {
+                if (passengerCount > 1) {
+                    passengerCount--;
+                    while (selectedSeats.length > passengerCount) {
+                        var removed = selectedSeats.pop();
+                        updateSeatOnServer(removed, 'available');
+                    }
+                    renderSeatMap();
+                }
+            };
+        }
+
+        if (plusBtn) {
+            plusBtn.onclick = function () {
+                if (passengerCount < 9) {
+                    passengerCount++;
+                    updateDisplay();
+                }
+            };
+        }
+
+        // Initial load
+        if (flightId) {
+            fetchSeatStatus();
+            setInterval(fetchSeatStatus, 10000);
+        }
+    </script>
+</body>
+
+</html>

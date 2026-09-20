@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <!-- Author Meta -->
+    <meta name="author" content="colorlib">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Travel</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            padding: 8px 0;
+            margin-top: 5px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 8px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu li a:hover {
+            background: #f8b600;
+            color: white;
+        }
+
+        .dropdown-menu .divider {
+            height: 1px;
+            background: #eee;
+            margin: 5px 0;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #f8b600;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-sm-6 col-6 header-top-left">
+                        <ul>
+                            <li><a href="#">Visit Us</a></li>
+                            <li><a href="#">Buy Tickets</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-6 header-top-right">
+                        <div class="header-social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-dribbble"></i></a>
+                            <a href="#"><i class="fa fa-behance"></i></a>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div class="dropdown" style="display: inline-block;">
+                            <a href="#" style="display: flex; align-items: center; gap: 8px;">
+                                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                                <span>{{ user.username }}</span>
+                                <i class="fa fa-chevron-down" style="font-size: 12px;"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'accounts:profile' %}"><i class="fa fa-user"></i> My Profile</a>
+                                </li>
+                                <li><a href="{% url 'bookings:cart' %}"><i class="fa fa-shopping-cart"></i> My Cart</a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-calendar"></i> My Bookings</a></li>
+                                <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                <li class="divider"></li>
+                                {% if user.userprofile.user_type == 'admin' %}
+                                <li><a href="{% url 'pages:admin_dashboard' %}"><i class="fa fa-tachometer"></i> Admin
+                                        Panel</a></li>
+                                <li class="divider"></li>
+                                {% endif %}
+                                <li><a href="{% url 'accounts:logout' %}" style="color: #ef4444;"><i
+                                            class="fa fa-sign-out"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <ul>
+                            <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                            <li><a href="{% url 'accounts:signup' %}">Register</a></li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container main-menu">
+            <div class="row align-items-center justify-content-between d-flex">
+                <div id="logo">
+                    <a href="{% url 'pages:index' %}"><img src="{% static 'img/logo.png' %}" alt="" title="" /></a>
+                </div>
+                <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li><a href="{% url 'pages:index' %}">Home</a></li>
+                        <li><a href="{% url 'pages:about' %}">About</a></li>
+                        <li><a href="{% url 'hotels:all_hotels' %}">Hotels</a></li>
+                        <li><a href="{% url 'flights:search' %}">Flights</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog-home' %}">Blog</a></li>
+                        <li class="menu-has-children"><a href="#">Pages</a>
+                            <ul>
+                                <li><a href="{% url 'pages:elements' %}">Elements</a></li>
+                                <li class="menu-has-children"><a href="#">Level 2</a>
+                                    <ul>
+                                        <li><a href="#">Item One</a></li>
+                                        <li><a href="#">Item Two</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="{% url 'pages:contact' %}">Contact</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'bookings:cart' %}">Cart</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>

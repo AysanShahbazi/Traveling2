@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta charset="UTF-8">
+    <title>Passenger Information | Travel Site</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .banner-area {
+            background: url('{% static "img/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            min-height: 200px;
+            padding-top: 80px;
+            padding: 80px;
+        }
+
+        .banner-area .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .banner-content h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .banner-content p {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .container-custom {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e67e22;
+        }
+
+        .summary-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .passenger-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .passenger-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #e67e22;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-primary {
+            background: #e67e22;
+            color: white;
+            padding: 8px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+            padding: 8px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #d35400;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="banner-content col-lg-12">
+                    <h1 class="text-white">Passenger Information</h1>
+                    <p class="text-white">Enter passenger details to complete your booking</p>
+                    <p class="text-white link-nav">
+                        <a href="{% url 'pages:index' %}" class="text-white">Home</a>
+                        <span class="lnr lnr-arrow-right"></span>
+                        <a href="{% url 'flights:all_flights' %}" class="text-white">Flights</a>
+                        <span class="lnr lnr-arrow-right"></span>
+                        <a href="#" class="text-white">Passenger Info</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-custom">
+        <div class="form-card">
+            <div class="form-title">Flight Summary</div>
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Flight:</span>
+                    <strong>{{ flight.flight_number }} - {{ flight.airline.name }}</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Route:</span>
+                    <span>{{ flight.origin.code }} → {{ flight.destination.code }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Date:</span>
+                    <span>{{ flight.departure_time|date:"d M Y, H:i" }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Class:</span>
+                    <span>{{ class_type|title }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Seat:</span>
+                    <span>{{ seat_number }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Passengers:</span>
+                    <span>{{ passenger_count }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Total Price:</span>
+                    <span>{{ total_price|floatformat:0 }} تومان</span>
+                </div>
+            </div>
+
+            <div class="form-title">Passenger Details</div>
+            <form method="post" action="{% url 'flights:booking_review' flight.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="class_type" value="{{ class_type }}">
+                <input type="hidden" name="seat_number" value="{{ seat_number }}">
+                <input type="hidden" name="passenger_count" value="{{ passenger_count }}">
+                <input type="hidden" name="total_price" value="{{ total_price }}">
+
+                {% for i in passenger_range %}
+                <div class="passenger-card">
+                    <div class="passenger-title">Passenger {{ forloop.counter }}</div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name_{{ i }}" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>National ID / Passport Number</label>
+                        <input type="text" name="id_number_{{ i }}" placeholder="Enter ID or passport number" required>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="btn-group">
+                    <a href="{% url 'flights:detail' flight.id %}" class="btn-secondary">Back</a>
+                    <button type="submit" class="btn-primary">Review Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Manage Banners{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Banners</h2>
+    <a href="{% url 'pages:add_banner' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Banner
+    </a>
+</div>
+
+{% if banners %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Subtitle</th>
+                <th>Image</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+            <tr>
+                <td>{{ banner.id }}</td>
+                <td>{{ banner.title }}</td>
+                <td>{{ banner.subtitle|truncatechars:30 }}</td>
+                <td>
+                    {% if banner.background_image and banner.background_image.url %}
+                    <img src="{{ banner.background_image.url }}" alt="" style="max-height: 40px;">
+                    {% else %}
+                    <span class="text-muted">No image</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if banner.is_active %}
+                    <span class="badge bg-success">Active</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>{{ banner.created_at|date:"M d, Y" }}</td>
+                <td>
+                    <a href="{% url 'pages:edit_banner' banner.pk %}" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'pages:delete_banner' banner.pk %}" class="btn btn-sm btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this banner?')">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="fas fa-image fa-4x text-muted mb-3"></i>
+    <h3>No Banners Found</h3>
+    <p class="text-muted">Start by adding your first banner!</p>
+    <a href="{% url 'pages:add_banner' %}" class="btn btn-primary btn-lg">
+        <i class="fas fa-plus"></i> Add First Banner
+    </a>
+</div>
+{% endif %}
+{% endblock %}

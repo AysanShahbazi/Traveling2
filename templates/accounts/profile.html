@@ -1,0 +1,412 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>Travel | My Profile</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .profile-tabs {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: #f8b600;
+        }
+
+        .tab-btn.active {
+            color: #f8b600;
+            border-bottom: 2px solid #f8b600;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .booking-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .booking-item:hover {
+            border-color: #f8b600;
+        }
+
+        .status-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #fed7aa;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <!-- Start banner Area -->
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 50vh;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Welcome Back</h6>
+                    <h1 class="text-white">My Profile</h1>
+                    <p class="text-white">Manage your account and bookings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End banner Area -->
+
+    <!-- Start Profile Area -->
+    <section class="popular-destination-area section-gap">
+        <div class="container">
+
+            <!-- Profile Header -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card" style="border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <div class="profile-avatar mx-auto">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <h3 class="mb-2">{{ user.username }}</h3>
+                                    <p class="text-muted mb-1"><i class="fa fa-envelope"></i> {{ user.email }}</p>
+                                    <p class="text-muted mb-2"><i class="fa fa-phone"></i> +98 912 345 6789</p>
+                                    <span class="badge" style="background: #f8b600; color: #000;">Gold Member</span>
+                                    <span class="badge"
+                                        style="background: #667eea; color: white; margin-left: 5px;">1,250 Points</span>
+                                </div>
+                                <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                                    <a href="{% url 'bookings:cart' %}" class="primary-btn text-uppercase">My Cart</a>
+                                    <a href="{% url 'accounts:logout' %}"
+                                        class="btn btn-outline-danger text-uppercase ms-2">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card" style="border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.08);">
+                        <div class="stat-icon">✈️</div>
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Flights Booked</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card" style="border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.08);">
+                        <div class="stat-icon">🏨</div>
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Hotels Booked</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card" style="border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.08);">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-number">$3,240</div>
+                        <div class="stat-label">Total Saved</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stat-card" style="border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.08);">
+                        <div class="stat-icon">🌍</div>
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Countries Visited</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card profile-tabs" style="border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div class="card-header bg-white p-0" style="border-bottom: 1px solid #eee;">
+                            <button class="tab-btn active" data-tab="info">Personal Info</button>
+                            <button class="tab-btn" data-tab="bookings">My Bookings</button>
+                            <button class="tab-btn" data-tab="wallet">Wallet & Points</button>
+                            <button class="tab-btn" data-tab="security">Security</button>
+                        </div>
+                        <div class="card-body p-0">
+
+                            <!-- Tab 1: Personal Info -->
+                            <div class="tab-content active" id="info">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" value="John">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" value="Doe">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="{{ user.email }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" value="+98 912 345 6789">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Date of Birth</label>
+                                            <input type="date" class="form-control" value="1990-05-15">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Passport Number</label>
+                                            <input type="text" class="form-control" value="P12345678">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control" rows="3">123 Main Street, Apartment 5</textarea>
+                                    </div>
+                                    <button type="submit" class="primary-btn text-uppercase">Save Changes</button>
+                                </form>
+                            </div>
+
+                            <!-- Tab 2: Bookings -->
+                            <div class="tab-content" id="bookings">
+                                <div class="booking-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong style="color: #f8b600;">Booking #TRV-2024-001234</strong>
+                                        <span class="status-confirmed">Confirmed</span>
+                                    </div>
+                                    <div class="d-flex gap-4 flex-wrap text-muted">
+                                        <span>✈️ Tehran → Istanbul</span>
+                                        <span>📅 March 5, 2025</span>
+                                        <span>👥 2 Passengers</span>
+                                        <span style="color: #f8b600; font-weight: bold;">$450</span>
+                                    </div>
+                                </div>
+
+                                <div class="booking-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong style="color: #f8b600;">Booking #TRV-2024-001235</strong>
+                                        <span class="status-pending">Pending Payment</span>
+                                    </div>
+                                    <div class="d-flex gap-4 flex-wrap text-muted">
+                                        <span>🏨 Hilton Istanbul</span>
+                                        <span>📅 March 6-8, 2025</span>
+                                        <span>🛏️ 2 Nights, Suite</span>
+                                        <span style="color: #f8b600; font-weight: bold;">$850</span>
+                                    </div>
+                                </div>
+
+                                <div class="booking-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong style="color: #f8b600;">Booking #TRV-2024-001230</strong>
+                                        <span class="status-cancelled">Cancelled</span>
+                                    </div>
+                                    <div class="d-flex gap-4 flex-wrap text-muted">
+                                        <span>✈️ Mashhad → Tehran</span>
+                                        <span>📅 January 20, 2025</span>
+                                        <span>👤 1 Passenger</span>
+                                        <span style="color: #f8b600; font-weight: bold;">$65</span>
+                                    </div>
+                                </div>
+
+                                <button class="primary-btn text-uppercase mt-3">View All Bookings</button>
+                            </div>
+
+                            <!-- Tab 3: Wallet -->
+                            <div class="tab-content" id="wallet">
+                                <div class="text-center mb-4">
+                                    <div class="profile-avatar mx-auto mb-3"
+                                        style="width: 80px; height: 80px; font-size: 32px;">💰</div>
+                                    <h2 style="color: #1f2937;">$2,450.00</h2>
+                                    <p class="text-muted">Wallet Balance</p>
+                                    <div class="mt-3">
+                                        <button class="primary-btn text-uppercase me-2">Add Funds</button>
+                                        <button class="btn btn-outline-secondary text-uppercase">Withdraw</button>
+                                    </div>
+                                </div>
+
+                                <div class="card p-3" style="background: #f9fafb; border-radius: 10px;">
+                                    <h5 class="mb-3">My Points</h5>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Current Points:</span>
+                                        <strong style="color: #f8b600;">1,250 Points</strong>
+                                    </div>
+                                    <div class="progress mb-2" style="height: 8px;">
+                                        <div class="progress-bar"
+                                            style="width: 62%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">2,000 points needed for next level</small>
+                                </div>
+                            </div>
+
+                            <!-- Tab 4: Security -->
+                            <div class="tab-content" id="security">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Current Password</label>
+                                        <input type="password" class="form-control" placeholder="••••••••">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">New Password</label>
+                                        <input type="password" class="form-control" placeholder="••••••••">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control" placeholder="••••••••">
+                                    </div>
+                                    <button type="submit" class="primary-btn text-uppercase">Change Password</button>
+                                </form>
+
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5>Two-Factor Authentication</h5>
+                                        <p class="text-muted mb-0">Add extra security to your account</p>
+                                    </div>
+                                    <button class="btn btn-outline-success text-uppercase">Enable</button>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="text-danger">Delete Account</h5>
+                                        <p class="text-muted mb-0">Permanently delete your account and all data</p>
+                                    </div>
+                                    <a href="{% url 'accounts:logout' %}"
+                                        class="btn btn-danger text-uppercase">Logout</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- End Profile Area -->
+
+    {% include 'includes/footer.html' %}
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const tabId = this.dataset.tab;
+
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

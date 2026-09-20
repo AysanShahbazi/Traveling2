@@ -1,0 +1,442 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <meta name="author" content="colorlib">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta charset="UTF-8">
+    <title>Travel | My Cart</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <style>
+        .cart-item-card {
+            border: none;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .cart-item-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .item-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .type-flight {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .type-hotel {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .summary-card {
+            border: none;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .step-circle.active {
+            background: #e67e22;
+            color: #fff;
+        }
+
+        .step-circle.completed {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .step-line {
+            width: 40px;
+            height: 2px;
+            background: #e5e7eb;
+        }
+
+        .step-line.completed {
+            background: #10b981;
+        }
+
+        .remove-btn {
+            color: #ef4444;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            color: #dc2626;
+            text-decoration: underline;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .summary-item-name {
+            color: #4b5563;
+        }
+
+        .summary-item-price {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .summary-divider {
+            border-top: 1px solid #e5e7eb;
+            margin: 12px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 2px solid #e67e22;
+            font-weight: bold;
+            font-size: 18px;
+            color: #e67e22;
+        }
+
+        .summary-label {
+            font-weight: 500;
+            color: #1f2937;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <section class="banner-area relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row fullscreen align-items-center justify-content-center" style="min-height: 40vh;">
+                <div class="col-lg-8 col-md-8 banner-left">
+                    <h6 class="text-white">Review Your Trip</h6>
+                    <h1 class="text-white">My Cart</h1>
+                    <p class="text-white">Review and finalize your bookings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-destination-area section-gap">
+        <div class="container">
+            <div class="row d-flex justify-content-center mb-5">
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-center align-items-center gap-3">
+                        <div class="text-center">
+                            <div class="step-circle active mb-2">1</div><small>Cart</small>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="text-center">
+                            <div class="step-circle mb-2">2</div><small>Details</small>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="text-center">
+                            <div class="step-circle mb-2">3</div><small>Payment</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    {% if cart_items %}
+                    {% for item in cart_items %}
+                    <div class="card cart-item-card mb-4" style="border-radius: 10px;"
+                        data-index="{{ forloop.counter0 }}" data-type="{{ item.type }}">
+                        <div class="card-body p-4">
+                            {% if item.type == 'hotel' %}
+                            <span class="item-type-badge type-hotel"><i class="fa fa-building"></i> Hotel
+                                Reservation</span>
+                            <h5 class="card-title mt-2">{{ item.name }}</h5>
+                            <div class="row mt-3">
+                                <div class="col-md-4 mb-2"><small class="text-muted">Room Type</small>
+                                    <p class="mb-0"><strong>{{ item.room_type }}</strong></p>
+                                </div>
+                                <div class="col-md-4 mb-2"><small class="text-muted">Check-in</small>
+                                    <p class="mb-0">{{ item.check_in }}</p>
+                                </div>
+                                <div class="col-md-4 mb-2"><small class="text-muted">Check-out</small>
+                                    <p class="mb-0">{{ item.check_out }}</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Nights</small>
+                                    <p class="mb-0">{{ item.nights }} nights</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Rooms</small>
+                                    <p class="mb-0">{{ item.rooms }} room(s)</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Adults</small>
+                                    <p class="mb-0">{{ item.adults }}</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Children</small>
+                                    <p class="mb-0">{{ item.children }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                                style="border-top: 1px solid #eee;">
+                                <button class="remove-btn" onclick="removeItem(this)"><i class="fa fa-trash"></i>
+                                    Remove</button>
+                                <h4 class="mb-0" style="color: #e67e22;">{{ item.total_price|floatformat:0 }} تومان</h4>
+                            </div>
+                            {% elif item.type == 'flight' %}
+                            <span class="item-type-badge type-flight"><i class="fa fa-plane"></i> Flight</span>
+                            <h5 class="card-title mt-2">{{ item.name }}</h5>
+                            <div class="row mt-3">
+                                <div class="col-md-3 mb-2"><small class="text-muted">Flight Number</small>
+                                    <p class="mb-0"><strong>{{ item.flight_number|default:"N/A" }}</strong></p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Airline</small>
+                                    <p class="mb-0">{{ item.airline|default:"N/A" }}</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Date</small>
+                                    <p class="mb-0">{{ item.date|default:"N/A" }}</p>
+                                </div>
+                                <div class="col-md-3 mb-2"><small class="text-muted">Class</small>
+                                    <p class="mb-0">{{ item.class|default:"Economy"|title }}</p>
+                                </div>
+                                <div class="col-md-4 mb-2"><small class="text-muted">Departure</small>
+                                    <p class="mb-0">{{ item.departure_time|default:"N/A" }}</p>
+                                </div>
+                                <div class="col-md-4 mb-2"><small class="text-muted">Arrival</small>
+                                    <p class="mb-0">{{ item.arrival_time|default:"N/A" }}</p>
+                                </div>
+                                <div class="col-md-4 mb-2"><small class="text-muted">Seat</small>
+                                    <p class="mb-0">{{ item.seat|default:"Not selected" }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                                style="border-top: 1px solid #eee;">
+                                <button class="remove-btn" onclick="removeItem(this)"><i class="fa fa-trash"></i>
+                                    Remove</button>
+                                <h4 class="mb-0" style="color: #e67e22;">{{ item.total_price|floatformat:0 }} تومان</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-shopping-cart fa-4x text-muted mb-3"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Start booking flights or hotels to see them here!</p>
+                        <div class="mt-4">
+                            <a href="{% url 'flights:all_flights' %}" class="primary-btn mx-2">Browse Flights</a>
+                            <a href="{% url 'hotels:all_hotels' %}" class="primary-btn mx-2">Browse Hotels</a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mt-4">
+                        <div class="d-flex justify-content-center gap-4 flex-wrap">
+                            <a href="{% url 'flights:all_flights' %}"
+                                style="color: #e67e22; text-decoration: none; font-weight: 500;">
+                                <i class="fa fa-plane"></i> Book More Flights
+                            </a>
+                            <a href="{% url 'hotels:all_hotels' %}"
+                                style="color: #e67e22; text-decoration: none; font-weight: 500;">
+                                <i class="fa fa-building"></i> Book More Hotels
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card summary-card" style="border-radius: 10px;">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4 pb-3" style="border-bottom: 2px solid #eee;">Trip Summary</h5>
+
+                            {% for item in cart_items %}
+                            <div class="summary-item">
+                                <span class="summary-item-name">
+                                    {% if item.type == 'hotel' %}
+                                    {{ item.name }}
+                                    <small style="color: #8a8a9e;">({{ item.room_type }})</small>
+                                    {% else %}
+                                    {{ item.name }}
+                                    <small style="color: #8a8a9e;">({{ item.flight_number }})</small>
+                                    {% endif %}
+                                </span>
+                                <span class="summary-item-price">
+                                    {% if item.type == 'hotel' %}
+                                    {{ item.total_price|floatformat:0 }}
+                                    {% else %}
+                                    {{ item.total_price|floatformat:0 }}
+                                    {% endif %}
+                                    تومان
+                                </span>
+                            </div>
+                            {% endfor %}
+
+                            <div class="summary-divider"></div>
+
+                            <div class="summary-item">
+                                <span class="summary-item-name">Subtotal</span>
+                                <span class="summary-item-price">{{ total|floatformat:0 }} تومان</span>
+                            </div>
+
+                            <div class="summary-item">
+                                <span class="summary-item-name">Travel Insurance</span>
+                                <span class="summary-item-price">0 تومان</span>
+                            </div>
+
+                            <div class="summary-item">
+                                <span class="summary-item-name">Tax &amp; Fees</span>
+                                <span class="summary-item-price">0 تومان</span>
+                            </div>
+
+                            <div class="my-4 py-3" style="border-top: 1px dashed #eee; border-bottom: 1px dashed #eee;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Coupon code" id="couponCode">
+                                    <button class="primary-btn" onclick="applyCoupon()"
+                                        style="padding: 8px 15px;">Apply</button>
+                                </div>
+                                <div id="couponMessage" class="mt-2" style="font-size: 12px;"></div>
+                            </div>
+
+                            <div class="summary-total">
+                                <span>Total</span>
+                                <span id="totalAmount">{{ total|floatformat:0 }} تومان</span>
+                            </div>
+
+                            {% if cart_items %}
+                            <a href="{% url 'bookings:checkout' %}"
+                                class="primary-btn text-uppercase w-100 mt-4 text-center d-block">
+                                Proceed to Checkout
+                            </a>
+                            {% else %}
+                            <button class="primary-btn text-uppercase w-100 mt-4 text-center d-block" disabled>
+                                Proceed to Checkout
+                            </button>
+                            {% endif %}
+
+                            <div class="text-center mt-3">
+                                <small class="text-muted"><i class="fa fa-lock"></i> Secure payment · Your data is
+                                    protected</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+
+    <script>
+        // روش 1: استفاده از escapejs (توصیه شده)
+        var totalAmount = parseInt("{{ total|escapejs }}") || 0;
+
+        // روش 2: استفاده از safe (اگر روش بالا کار نکرد)
+        // var totalAmount = {{ total|safe|default:0 }};
+
+        // روش 3: استفاده از if (امن‌ترین روش)
+        // {% if total %}
+        // var totalAmount = {{ total|safe }};
+        // {% else %}
+        // var totalAmount = 0;
+        // {% endif %}
+
+        function removeItem(btn) {
+            var card = btn.closest('.cart-item-card');
+            var index = card.getAttribute('data-index');
+            var type = card.getAttribute('data-type');
+
+            if (confirm('Are you sure you want to remove this item?')) {
+                fetch('/bookings/remove-from-cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: 'type=' + type + '&index=' + index
+                }).then(function (response) {
+                    window.location.reload();
+                });
+            }
+        }
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function applyCoupon() {
+            var code = document.getElementById('couponCode').value;
+            var messageDiv = document.getElementById('couponMessage');
+
+            if (code === 'SAVE10') {
+                var discount = totalAmount * 0.1;
+                var newTotal = totalAmount - discount;
+                document.getElementById('totalAmount').innerHTML = newTotal.toLocaleString() + ' تومان';
+                messageDiv.innerHTML = '<span style="color: #10b981;">✓ 10% discount applied!</span>';
+            } else if (code === 'WELCOME') {
+                var newTotal = totalAmount - 50;
+                document.getElementById('totalAmount').innerHTML = newTotal.toLocaleString() + ' تومان';
+                messageDiv.innerHTML = '<span style="color: #10b981;">✓ 50 تومان discount applied!</span>';
+            } else if (code) {
+                messageDiv.innerHTML = '<span style="color: #ef4444;">✗ Invalid coupon code</span>';
+            }
+        }
+    </script>
+</body>
+
+</html>

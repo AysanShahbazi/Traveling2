@@ -1,0 +1,76 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Manage About Section{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Manage About Section</h4>
+    <div>
+        <a href="{% url 'pages:add_about' %}" class="btn btn-success btn-sm">
+            <i class="fas fa-plus"></i> Add New
+        </a>
+        <a href="{% url 'pages:admin_dashboard' %}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    {% for about in about_sections %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if about.image and about.image.url %}
+                    <img src="{{ about.image.url }}" class="img-fluid rounded-start" alt=""
+                        style="height: 150px; width: 100%; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body py-2 px-3">
+                        <h6 class="card-title mb-1">{{ about.title|truncatechars:30 }}</h6>
+                        <p class="card-text small text-muted mb-1">{{ about.description|truncatechars:60 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge {% if about.is_active %}bg-success{% else %}bg-secondary{% endif %}"
+                                style="font-size: 9px;">
+                                {% if about.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                            <div>
+                                <a href="{% url 'pages:edit_about' about.pk %}"
+                                    class="btn btn-sm btn-warning py-0 px-1">
+                                    <i class="fas fa-edit" style="font-size: 11px;"></i>
+                                </a>
+                                <a href="{% url 'pages:delete_about' about.pk %}"
+                                    class="btn btn-sm btn-danger py-0 px-1" onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash" style="font-size: 11px;"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-4">
+        <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+        <h5>No About Sections</h5>
+        <p class="text-muted small">Add your first about section to customize the about page.</p>
+        <a href="{% url 'pages:add_about' %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Add About Section
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not about_sections %}
+<div class="alert alert-info mt-3">
+    <small><i class="fas fa-info-circle"></i> No custom about section found. The default about section will be shown on
+        the website.</small>
+</div>
+{% endif %}
+{% endblock %}

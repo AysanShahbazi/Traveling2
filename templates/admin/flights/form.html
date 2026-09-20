@@ -1,0 +1,234 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{{ action }} Flight{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>{{ action }} Flight</h4>
+    <a href="{% url 'flights:admin_flights' %}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="airline" class="form-label">Airline *</label>
+                    <select name="airline" id="airline" class="form-control" required>
+                        <option value="">Select Airline</option>
+                        {% for airline in airlines %}
+                        <option value="{{ airline.id }}">
+                            {{ airline.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="flight_number" class="form-label">Flight Number *</label>
+                    <input type="text" name="flight_number" id="flight_number" class="form-control"
+                        value="{{ flight.flight_number|default:'' }}" required>
+                    <small class="text-muted">e.g., IR801, TK879</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="origin" class="form-label">Origin *</label>
+                    <select name="origin" id="origin" class="form-control" required>
+                        <option value="">Select Origin</option>
+                        {% for airport in airports %}
+                        <option value="{{ airport.id }}">
+                            {{ airport.name }} ({{ airport.code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="destination" class="form-label">Destination *</label>
+                    <select name="destination" id="destination" class="form-control" required>
+                        <option value="">Select Destination</option>
+                        {% for airport in airports %}
+                        <option value="{{ airport.id }}">
+                            {{ airport.name }} ({{ airport.code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="departure_time" class="form-label">Departure Time *</label>
+                    <input type="datetime-local" name="departure_time" id="departure_time" class="form-control"
+                        value="{{ flight.departure_time|date:'Y-m-d\\TH:i'|default:'' }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="arrival_time" class="form-label">Arrival Time *</label>
+                    <input type="datetime-local" name="arrival_time" id="arrival_time" class="form-control"
+                        value="{{ flight.arrival_time|date:'Y-m-d\\TH:i'|default:'' }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="economy_price" class="form-label">Economy Price (Toman)</label>
+                    <input type="number" name="economy_price" id="economy_price" class="form-control"
+                        value="{{ flight.economy_price|default:0 }}">
+                    <small class="text-muted">e.g., 8500000</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="business_price" class="form-label">Business Price (Toman)</label>
+                    <input type="number" name="business_price" id="business_price" class="form-control"
+                        value="{{ flight.business_price|default:0 }}">
+                    <small class="text-muted">e.g., 15000000</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="first_class_price" class="form-label">First Class Price (Toman)</label>
+                    <input type="number" name="first_class_price" id="first_class_price" class="form-control"
+                        value="{{ flight.first_class_price|default:0 }}">
+                    <small class="text-muted">e.g., 22000000</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="economy_seats" class="form-label">Economy Seats</label>
+                    <input type="number" name="economy_seats" id="economy_seats" class="form-control"
+                        value="{{ flight.economy_seats|default:150 }}">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="business_seats" class="form-label">Business Seats</label>
+                    <input type="number" name="business_seats" id="business_seats" class="form-control"
+                        value="{{ flight.business_seats|default:30 }}">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="first_class_seats" class="form-label">First Class Seats</label>
+                    <input type="number" name="first_class_seats" id="first_class_seats" class="form-control"
+                        value="{{ flight.first_class_seats|default:10 }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="aircraft_type" class="form-label">Aircraft Type</label>
+                <input type="text" name="aircraft_type" id="aircraft_type" class="form-control"
+                    value="{{ flight.aircraft_type|default:'' }}">
+                <small class="text-muted">e.g., Airbus A330, Boeing 777</small>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="baggage_allowance" class="form-label">Baggage Allowance (kg)</label>
+                    <input type="number" name="baggage_allowance" id="baggage_allowance" class="form-control"
+                        value="{{ flight.baggage_allowance|default:30 }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="hand_baggage" class="form-label">Hand Baggage (kg)</label>
+                    <input type="number" name="hand_baggage" id="hand_baggage" class="form-control"
+                        value="{{ flight.hand_baggage|default:7 }}">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="has_meal" name="has_meal" value="on">
+                        <label class="form-check-label" for="has_meal">Has Meal</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="has_entertainment" name="has_entertainment"
+                            value="on">
+                        <label class="form-check-label" for="has_entertainment">Has Entertainment</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="on">
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-save"></i> {{ action }} Flight
+                </button>
+                <a href="{% url 'flights:admin_flights' %}" class="btn btn-secondary btn-sm">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // تنظیم Airline
+        var airlineSelect = document.getElementById('airline');
+        if (airlineSelect) {
+            var selectedAirline = "{{ flight.airline.id|default:'' }}";
+            if (selectedAirline) {
+                for (var i = 0; i < airlineSelect.options.length; i++) {
+                    if (airlineSelect.options[i].value === selectedAirline) {
+                        airlineSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // تنظیم Origin
+        var originSelect = document.getElementById('origin');
+        if (originSelect) {
+            var selectedOrigin = "{{ flight.origin.id|default:'' }}";
+            if (selectedOrigin) {
+                for (var i = 0; i < originSelect.options.length; i++) {
+                    if (originSelect.options[i].value === selectedOrigin) {
+                        originSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // تنظیم Destination
+        var destSelect = document.getElementById('destination');
+        if (destSelect) {
+            var selectedDest = "{{ flight.destination.id|default:'' }}";
+            if (selectedDest) {
+                for (var i = 0; i < destSelect.options.length; i++) {
+                    if (destSelect.options[i].value === selectedDest) {
+                        destSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // تنظیم چک‌باکس‌ها
+        var hasMeal = "{{ flight.has_meal|default:'False' }}";
+        var mealCheckbox = document.getElementById('has_meal');
+        if (mealCheckbox && hasMeal.toLowerCase() === 'true') {
+            mealCheckbox.checked = true;
+        }
+
+        var hasEntertainment = "{{ flight.has_entertainment|default:'False' }}";
+        var entertainmentCheckbox = document.getElementById('has_entertainment');
+        if (entertainmentCheckbox && hasEntertainment.toLowerCase() === 'true') {
+            entertainmentCheckbox.checked = true;
+        }
+
+        var isActive = "{{ flight.is_active|default:'True' }}";
+        var activeCheckbox = document.getElementById('is_active');
+        if (activeCheckbox && isActive.toLowerCase() === 'true') {
+            activeCheckbox.checked = true;
+        }
+    });
+</script>
+{% endblock %}
