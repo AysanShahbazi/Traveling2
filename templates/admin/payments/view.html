@@ -1,0 +1,100 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Payment Details{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Payment Details</h4>
+    <a href="{% url 'pages:manage_payments' %}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Transaction Information</h6>
+                <hr>
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="200">Transaction ID:</th>
+                        <td><code>{{ payment.transaction_id }}</code></td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            {% if payment.status == 'success' %}
+                            <span class="badge bg-success">{{ payment.get_status_display }}</span>
+                            {% elif payment.status == 'failed' %}
+                            <span class="badge bg-danger">{{ payment.get_status_display }}</span>
+                            {% elif payment.status == 'refunded' %}
+                            <span class="badge bg-info">{{ payment.get_status_display }}</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">{{ payment.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Amount:</th>
+                        <td><strong>{{ payment.amount|floatformat:0 }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Method:</th>
+                        <td>{{ payment.get_method_display }}</td>
+                    </tr>
+                    {% if payment.card_last4 %}
+                    <tr>
+                        <th>Card:</th>
+                        <td>**** **** **** {{ payment.card_last4 }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Created At:</th>
+                        <td>{{ payment.created_at|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                    {% if payment.paid_at %}
+                    <tr>
+                        <th>Paid At:</th>
+                        <td>{{ payment.paid_at|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if payment.error_message %}
+                    <tr>
+                        <th>Error:</th>
+                        <td class="text-danger">{{ payment.error_message }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Booking Information</h6>
+                <hr>
+                <p><strong>Ref:</strong> {{ payment.booking.booking_ref }}</p>
+                <p><strong>Customer:</strong> {{ payment.booking.full_name }}</p>
+                <p><strong>Email:</strong> {{ payment.booking.email }}</p>
+                <p><strong>Phone:</strong> {{ payment.booking.phone }}</p>
+                <p><strong>Total:</strong> {{ payment.booking.total|floatformat:0 }}</p>
+                <a href="{% url 'bookings:confirmation' payment.booking.booking_ref %}" target="_blank"
+                    class="btn btn-sm btn-outline-primary w-100">
+                    <i class="fas fa-external-link-alt"></i> View Booking
+                </a>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <a href="{% url 'pages:delete_payment' payment.pk %}" class="btn btn-danger w-100"
+                    onclick="return confirm('Delete this payment?')">
+                    <i class="fas fa-trash"></i> Delete Payment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

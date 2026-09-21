@@ -3,8 +3,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
 import random
 import string
 import json
@@ -230,7 +228,8 @@ def confirm_booking(request):
     request.session['cart'] = []
     request.session['checkout_info'] = {}
     
-    return redirect('bookings:confirmation', ref=booking_ref)
+        # هدایت به صفحه‌ی پرداخت
+    return redirect('payments:process', booking_ref=booking_ref)
 
 
 def generate_booking_ref():

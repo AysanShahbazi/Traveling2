@@ -56,4 +56,14 @@ urlpatterns = [
     path('dashboard/bookings/add/', views.add_booking, name='add_booking'),
     path('dashboard/bookings/edit/<int:booking_id>/', views.edit_booking, name='edit_booking'),
     path('dashboard/bookings/delete/<int:booking_id>/', views.delete_booking, name='delete_booking'),
+    
+    # Contact Message Management
+    path('dashboard/messages/', views.manage_messages, name='manage_messages'),
+    path('dashboard/messages/<int:pk>/', views.view_message, name='view_message'),
+    path('dashboard/messages/delete/<int:pk>/', views.delete_message, name='delete_message'),
+        
+    # Payment Management
+    path('dashboard/payments/', views.manage_payments, name='manage_payments'),
+    path('dashboard/payments/<int:pk>/', views.view_payment, name='view_payment'),
+    path('dashboard/payments/delete/<int:pk>/', views.delete_payment, name='delete_payment'),
 ]

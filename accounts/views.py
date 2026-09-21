@@ -80,7 +80,7 @@ def signup_view(request):
         # ایجاد پروفایل
         UserProfile.objects.create(
             user=user,
-            user_type='user',
+            user_type='customer',
             phone=phone,
             birth_date=birth_date if birth_date else None
         )

@@ -86,14 +86,17 @@ class Flight(models.Model):
             return self.first_class_price
     
     def get_available_seats(self, class_type='economy'):
-        from bookings.models import Booking
-        booked = Booking.objects.filter(flight=self, class_type=class_type).count()
+        """
+        تعداد صندلی‌های خالی را برمی‌گرداند   .
+        فعلاً فقط تعداد کل را برمی‌گرداند چون رزروها در JSON ذخیره می‌شوند.
+        در آینده می‌توان با پردازش Booking.items این را دقیق‌تر کرد.
+        """
         if class_type == 'economy':
-            return self.economy_seats - booked
+            return self.economy_seats
         elif class_type == 'business':
-            return self.business_seats - booked
+            return self.business_seats
         else:
-            return self.first_class_seats - booked
+            return self.first_class_seats
     
     def get_absolute_url(self):
         return reverse('flights:detail', args=[self.id])

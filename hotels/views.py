@@ -85,8 +85,8 @@ def hotel_detail(request, hotel_id):
     # اتاق‌ها
     rooms = hotel.rooms.filter(is_available=True).select_related('room_type')
 
-    # نوع اتاق‌ها
-    room_types = hotel.room_types.all()
+    # گرفتن room_typeهای یکتای این هتل
+    room_types = RoomType.objects.filter(room__hotel=hotel).distinct()
 
     # نظرات تأییدشده
     approved_reviews = hotel.reviews.filter(is_approved=True).select_related('user')

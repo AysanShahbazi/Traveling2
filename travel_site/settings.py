@@ -132,30 +132,16 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL= '/media/'
-MEDIA_ROOT= BASE_DIR / '/media/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
+LOGIN_URL = 'accounts:login'
 
-LOGIN_URL = 'pages:login'
 LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'pages:index'
-
-
-# Email settings for contact form
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # یا SMTP provider شما
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-app-password'
-DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
-CONTACT_EMAIL = 'your-contact-email@gmail.com'
-ADMIN_EMAIL = 'admin@travelsite.com'
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-

@@ -290,6 +290,12 @@
                 <a class="nav-link" href="{% url 'pages:manage_bookings' %}">
                     <i class="fas fa-ticket-alt"></i> <span>Bookings</span>
                 </a>
+                <a class="nav-link" href="{% url 'pages:manage_messages' %}">
+                    <i class="fas fa-envelope"></i> <span>Messages</span>
+                </a>
+                <a class="nav-link" href="{% url 'pages:manage_payments' %}">
+                    <i class="fas fa-credit-card"></i> <span>Payments</span>
+                </a>
                 <a class="nav-link" href="{% url 'pages:admin_users' %}">
                     <i class="fas fa-users"></i> <span>Users</span>
                 </a>
@@ -326,8 +332,7 @@
             {% endfor %}
             {% endif %}
 
-            {% block content %}
-            {% endblock %}
+            {% block content %}{% endblock %}
 
         </main>
 

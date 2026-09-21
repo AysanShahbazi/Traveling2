@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}پرداخت{% endblock %}
+
+{% block container %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-credit-card"></i> پرداخت رزرو</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>شماره رزرو:</strong> {{ booking.booking_ref }}<br>
+                        <strong>مبلغ قابل پرداخت:</strong> {{ booking.total|floatformat:0 }} تومان<br>
+                        <strong>روش پرداخت:</strong> {{
+                        booking.get_payment_method_display|default:booking.payment_method }}
+                    </div>
+
+                    {% if payment.status == 'failed' %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        پرداخت قبلی ناموفق بود. لطفاً دوباره تلاش کنید.
+                        {% if payment.error_message %}
+                        <br><small>{{ payment.error_message }}</small>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">شماره کارت</label>
+                            <input type="text" name="card_number" class="form-control" placeholder="1234 5678 9012 3456"
+                                maxlength="19" required>
+                            <small class="text-muted">برای تست: هر ۱۶ رقم</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">تاریخ انقضا</label>
+                                <input type="text" name="expiry" class="form-control" placeholder="MM/YY" maxlength="5"
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CVV2</label>
+                                <input type="text" name="cvv" class="form-control" placeholder="123" maxlength="4"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-lock"></i> پرداخت {{ booking.total|floatformat:0 }} تومان
+                            </button>
+                            <a href="{% url 'bookings:cart' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> بازگشت به سبد
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-muted text-center small">
+                    <i class="fas fa-shield-alt"></i> این یک پرداخت شبیه‌سازی‌شده است
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
